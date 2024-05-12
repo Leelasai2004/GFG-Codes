@@ -32,7 +32,19 @@ class Solution {
               dp[i][2]=max(points[i][0]+dp[i-1][0],points[i][1]+dp[i-1][1]);
             }
         }
-        return max(dp[n-1][0],max(dp[n-1][1],dp[n-1][2]));
+        int take0=dp[0][0];
+        int take1=dp[0][1];
+        int take2=dp[0][2];
+        int nottake=max({take0,take1,take2});
+        for(int i=1;i<n;i++){
+            int n0=max(take1+points[i][1],take2+points[i][2]);
+            int n1=max(take0+points[i][0],take2+points[i][2]);
+            int n2=max(take1+points[i][1],take0+points[i][0]);
+            take1=n1,take2=n2,take0=n0;
+        }
+        // return max(dp[n-1][0],max(dp[n-1][1],dp[n-1][2]));
+        
+        return max({take1,take2,take0});
     }
 };
 
