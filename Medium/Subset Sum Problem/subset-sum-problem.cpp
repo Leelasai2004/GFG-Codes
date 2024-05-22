@@ -10,11 +10,25 @@ using namespace std;
 class Solution{   
 public:
     bool isSubsetSum(vector<int>arr, int sum){
-        bitset<100001> sums(1);
-        for(auto &x:arr){
-            sums=sums | sums<<x;
+        int max_sum=0;
+        int n=arr.size();
+        for(int i=0;i<n;i++){
+            max_sum+=arr[i];
         }
-        return sums[sum];
+        vector<vector<int>> dp(n+1,vector<int>(max_sum+1,0));
+        for(int i=0;i<n;i++) dp[i][0]=true;
+        for(int i=0;i<n;i++) dp[i][arr[i]]=true;
+        for(int i=0;i<n;i++){
+           for(int j=0;j<=max_sum;j++){
+               if(j-arr[i]>=0){
+                   if(i>=1) dp[i][j]=dp[i-1][j] | dp[i-1][j-arr[i]];
+               }
+               else{
+                   if(i>=1)dp[i][j]= dp[i-1][j];
+               }
+           }
+        }
+        return (sum<=max_sum)?dp[n-1][sum]:0;
     }
 };
 
