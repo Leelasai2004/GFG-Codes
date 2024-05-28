@@ -9,26 +9,32 @@ using namespace std;
 
 class Solution{   
 public:
-    bool isSubsetSum(vector<int>arr, int sum){
-        int max_sum=0;
-        int n=arr.size();
-        for(int i=0;i<n;i++){
-            max_sum+=arr[i];
+    bool isSubsetSum(vector<int>v, int sum){
+      
+    int n=v.size();
+     int max_sum=0;
+    for(int i=0;i<n;i++) {max_sum+=v[i];}
+    vector<vector<int>> dp(n+1,vector<int>(max_sum+1,0));
+    dp[0][0]=1;
+    for(int i=1;i<=n;i++){
+        dp[i][0]=1;
+        for(int curr=0;curr<=max_sum;curr++){
+            dp[i][curr]=max(dp[i][curr],dp[i-1][curr]);
+            if(dp[i-1][curr]!=0){
+                dp[i][curr+v[i-1]]=1;   //push_dp
+            }
         }
-        vector<vector<int>> dp(n+1,vector<int>(max_sum+1,0));
-        for(int i=0;i<n;i++) dp[i][0]=true;
-        for(int i=0;i<n;i++) dp[i][arr[i]]=true;
-        for(int i=0;i<n;i++){
-           for(int j=0;j<=max_sum;j++){
-               if(j-arr[i]>=0){
-                   if(i>=1) dp[i][j]=dp[i-1][j] | dp[i-1][j-arr[i]];
-               }
-               else{
-                   if(i>=1)dp[i][j]= dp[i-1][j];
-               }
-           }
-        }
-        return (sum<=max_sum)?dp[n-1][sum]:0;
+    }
+    // int ans=0;
+    // for(int i=0;i<=max_sum;i++){
+    //     if(dp[n][i]==0) continue;
+    //     if(__builtin_popcountll(i)==k){
+    //         // cout<<i<<'\n';
+    //         ans++;
+    //     }
+
+    // }
+    return (sum<=max_sum)?dp[n][sum]:0;
     }
 };
 
