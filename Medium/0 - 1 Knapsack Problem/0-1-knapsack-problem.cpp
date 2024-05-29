@@ -10,23 +10,19 @@ class Solution
     //Function to return max value that can be put in knapsack of capacity W.
     int knapSack(int w, int wt[], int val[], int n) 
     { 
-        vector<vector<int>> dp(n+1,vector<int>(w+1,0));
-        dp[0][0]=0;
+        vector<int> dp(w+1,0);
+      
         for(int i=1;i<=n;i++){
-            for(int j=0;j<=w;j++){
-                // cout<<"#x "<<i<<" "<<j<<" "<<dp[i-1][j]<<'\n';
-    
-                if(j+wt[i-1]<=w && (dp[i-1][j]!=0 || j==0)){
-                    // cout<<j+wt[i-1]<<" "<<dp[i-1][j]+val[i-1]<<'\n';
-                    dp[i][j+wt[i-1]]=max(dp[i-1][j+wt[i-1]],dp[i-1][j]+val[i-1]);
-                    // cout<<dp[i][j+wt[i-1]]<<'\n';
-                    
-                }
-                dp[i][j]=max(dp[i-1][j],dp[i][j]);
-            //   cout<<"#y "<<i<<" "<<j<<" "<<dp[i][j]<<'\n';
+            for(int j=w;j>=0;j--){
+               int nottake=dp[j];
+               int take=INT_MIN;
+               if(j-wt[i-1]>=0){
+                   take=val[i-1]+dp[j-wt[i-1]];
+               }
+               dp[j]=max(take,nottake);
             }
         }
-        return *max_element(dp[n].begin(),dp[n].end());
+        return dp[w];
     }
 };
 
